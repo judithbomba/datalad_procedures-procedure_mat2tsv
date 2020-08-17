@@ -3,15 +3,16 @@
 """
 Created on Sun Aug 16 12:21:33 2020
 
-@author: Judith Bomba 
+@author: Judith Bomba
 """
 import os
 import sys
 import pandas as pd
+import datalad.api.save as dlsave
 
 inputs = sys.argv[:]
 print('inputs are: ',inputs)
-input1 = sys.argv[1] #my_source 
+input1 = sys.argv[1] #my_source
 input2 = sys.argv[2] #my_destination
 print('will gather .mat files from source:', input1, 'will convert to .tsv files stored in:', input2)
 
@@ -40,13 +41,13 @@ def mat_to_tsv(filename, filestring, destination):
     '''
     import pandas as pd
     filenm = (filename)
-    
+
     try:
         import scipy.io
         test = scipy.io.loadmat(filenm)
         #print(test)
     except NotImplementedError:
-        print("scipy is not working on this file")   
+        print("scipy is not working on this file")
     except:
         ValueError('Warning: could not read the file at all...')
 
@@ -71,10 +72,10 @@ def mat_to_tsv(filename, filestring, destination):
             names.append(nm)
 
     dataframe = pd.DataFrame(zip(onsets,duration,names), columns = ['onsets','duration','names'])
-    
+
     filename = filestring[:-4]
     dataframe.to_csv('{}/{}_events.tsv'.format(destination,filename), sep = '\t', index=False)
-    
+
 
 
 filesource = os.path.join(root, input1)
@@ -95,3 +96,5 @@ for file in os.listdir(filesource):
         mat_to_tsv(filename, filestring, destination)
 
 print('#these are my files in {} after converting:\n'.format(input2),os.listdir(destination)) #my_d
+
+dlsave(path='.',message='convert .mat files from source ({}) to .tsv files and store them in ({})'.format(input1,input2))
