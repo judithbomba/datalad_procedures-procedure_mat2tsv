@@ -1,2 +1,5 @@
 [datalad "dataset"]
 	id = ced5ee54-e082-11ea-869c-3b9b998d655b
+
+[datalad "procedures.mat2tsv"]
+	help = "converts spm_x_x_x.mat files (33x4) to events.tsv files"
