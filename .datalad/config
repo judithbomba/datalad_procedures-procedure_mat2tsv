@@ -3,3 +3,4 @@
 
 [datalad "procedures.mat2tsv"]
 	help = "converts spm_x_x_x.mat files (33x4) to events.tsv files"
+	call-format = "python {script} {ds} {soucefolder} {destinationfolder}"
