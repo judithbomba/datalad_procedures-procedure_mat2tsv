@@ -18,10 +18,18 @@ ds = require_dataset(
     purpose='converting .mat to .tsv files')
 
 inputs = sys.argv[:]
-print('inputs are: ',inputs)
-input1 = sys.argv[2] #my_source
-input2 = sys.argv[3] #my_destination
-print('will gather .mat files from source:', input1, 'will convert to .tsv files stored in:', input2)
+print('[HIRNI ADDONS] Running code with following inputs: ')
+print('[HIRNI ADDONS] ', inputs)
+#input1 = sys.argv[2] #my_source
+#input2 = sys.argv[3] #my_destination
+
+location = sys.argv[2]
+bidsub = sys.argv[3]
+bidses = sys.argv[4]
+bidrun = sys.argv[5]
+
+
+print('[HIRNI ADDONS] Will gather .mat files from source:', location, 'will convert to .tsv files stored in:', input2)
 
 #print("the root of this project is:", os.path.dirname())
 
