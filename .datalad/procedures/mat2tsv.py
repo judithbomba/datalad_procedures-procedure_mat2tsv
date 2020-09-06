@@ -18,8 +18,8 @@ ds = require_dataset(
     purpose='converting .mat to .tsv files')
 
 inputs = sys.argv[:]
-print('[HIRNI ADDONS] Running mat2tsv converter with following inputs: ')
-print('[HIRNI ADDONS] ', inputs)
+print('[HIRNI MAT2TSV] Running mat2tsv converter with following inputs: ')
+print('[HIRNI MAT2TSV] ', inputs)
 #input1 = sys.argv[2] #my_source
 #input2 = sys.argv[3] #my_destination
 
@@ -33,7 +33,7 @@ filename = head_tail[1]
 bids = os.path.join(ds,'sub-{}'.format(bidsub),'ses-{}'.format(bidses),func)
 
  
-print('[HIRNI ADDONS] Will gather .mat files from source:', location, 'will convert to .tsv files stored in:', input2)
+print('[HIRNI MAT2TSV] Will gather .mat files from source:', location, 'will convert to .tsv files stored in:', input2)
 
 #print("the root of this project is:", os.path.dirname())
 
@@ -54,9 +54,9 @@ def mat_to_tsv(filelocation, filestring, destination):
         test = scipy.io.loadmat(file)
         #print(test)
     except NotImplementedError:
-        print("[HIRNI ADDONS] ERROR: scipy is not working on this .mat file.")
+        print("[HIRNI MAT2TSV] ERROR: scipy is not working on this .mat file.")
     except:
-        ValueError('[HIRNI ADDONS] WARNING: could not read the file at all...')
+        ValueError('[HIRNI MAT2TSV] WARNING: could not read the file at all...')
 
     mat = scipy.io.loadmat(file)
     mat = {k:v for k, v in mat.items() if k[0] != '_'}
@@ -104,4 +104,4 @@ def mat_to_tsv(filelocation, filestring, destination):
 
 mat_to_tsv(location, filename, bids)
 ds.save(path='.',message='convert .mat file from source ({}) to .tsv files and store them in ({})'.format(location,bids))
-print('[HIRNI ADDONS] Converted .mat file from source ({}) to .tsv files and stored them in ({})'.format(location,bids))
+print('[HIRNI MAT2TSV] Converted .mat file from source ({}) to .tsv files and stored them in ({})'.format(location,bids))
