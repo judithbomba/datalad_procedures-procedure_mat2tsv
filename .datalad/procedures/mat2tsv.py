@@ -9,6 +9,7 @@ import os
 import sys
 import pandas as pd
 from datalad.distribution.dataset import require_dataset
+import datalad.api as dl
 
 #apparently the call structure for python automatically takes the current dataset (root?) as positional argument {ds} number two
 #to resolve said dataset and to make the procedure truly universally run-able this seems to be necessary
@@ -23,17 +24,26 @@ print('[HIRNI MAT2TSV] ', inputs)
 #input1 = sys.argv[2] #my_source
 #input2 = sys.argv[3] #my_destination
 
-location = sys.argv[2]
+location = os.path.join(sys.argv[1],sys.argv[2])
+dl.get(location)
 bidsub = sys.argv[3]
 bidses = sys.argv[4]
 bidrun = sys.argv[5]
+bidtas = sys.argv[6]
 func = 'func'
-head_tail = os.path.split(location)
-filename = head_tail[1]
-bids = os.path.join(ds,'sub-{}'.format(bidsub),'ses-{}'.format(bidses),func)
+filename = 'sub-{}_sess-{}_task-{}_run-{}_events'.format(bidsub, bidses, bidtas, bidrun)
+bids = os.path.join(sys.argv[1],'sub-{}'.format(bidsub),'ses-{}'.format(bidses),func)
 
+if not os.path.exists(bids):
+    os.makedirs(bids)
+
+temp = os.path.join(bids,"{}.tsv".format(filename))
+#print(temp,'******************************')
+if os.path.exists(temp):
+    dl.unlock(temp)
+    #print('unlocked?')
  
-print('[HIRNI MAT2TSV] Will gather .mat files from source:', location, 'will convert to .tsv files stored in:', input2)
+print('[HIRNI MAT2TSV] Will gather .mat files from source:', location, 'will convert to .tsv files stored in:', bids)
 
 #print("the root of this project is:", os.path.dirname())
 
@@ -80,8 +90,8 @@ def mat_to_tsv(filelocation, filestring, destination):
 
     dataframe = pd.DataFrame(zip(onsets,duration,names), columns = ['onsets','duration','names'])
 
-    filename = filestring[:-4]
-    dataframe.to_csv('{}/{}_events.tsv'.format(destination,filename), sep = '\t', index=False)
+    filename = filestring
+    dataframe.to_csv('{}/{}.tsv'.format(destination,filename), sep = '\t', index=False)
 
 #filesource = os.path.join(root, input1)
 #print(filesource)
@@ -105,3 +115,4 @@ def mat_to_tsv(filelocation, filestring, destination):
 mat_to_tsv(location, filename, bids)
 ds.save(path='.',message='convert .mat file from source ({}) to .tsv files and store them in ({})'.format(location,bids))
 print('[HIRNI MAT2TSV] Converted .mat file from source ({}) to .tsv files and stored them in ({})'.format(location,bids))
+
